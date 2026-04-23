@@ -4,897 +4,775 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Find Your Perfect Hairstyle & Skincare Routine</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0d0d0d;
-    --surface: #161616;
-    --surface2: #1e1e1e;
-    --gold: #c9a84c;
-    --gold-light: #e8c97a;
-    --gold-dim: rgba(201,168,76,0.15);
-    --text: #f0ece4;
-    --text-muted: #8a8074;
-    --border: rgba(201,168,76,0.2);
-    --radius: 14px;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* ── Background texture ── */
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background:
-      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(201,168,76,0.08) 0%, transparent 65%),
-      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    pointer-events: none; z-index: 0;
-  }
-
-  .wrapper {
-    position: relative; z-index: 1;
-    max-width: 680px;
-    margin: 0 auto;
-    padding: 40px 20px 80px;
-  }
-
-  /* ── Header ── */
-  .header {
-    text-align: center;
-    margin-bottom: 52px;
-    animation: fadeDown 0.7s ease both;
-  }
-
-  .badge {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--gold);
-    border: 1px solid var(--border);
-    border-radius: 100px;
-    padding: 6px 18px;
-    margin-bottom: 22px;
-    background: var(--gold-dim);
-  }
-
-  h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(28px, 6vw, 42px);
-    font-weight: 900;
-    line-height: 1.15;
-    color: var(--text);
-    margin-bottom: 16px;
-  }
-
-  h1 span { color: var(--gold); }
-
-  .subtitle {
-    font-size: 15px;
-    color: var(--text-muted);
-    line-height: 1.6;
-    max-width: 420px;
-    margin: 0 auto;
-  }
-
-  /* ── Progress bar ── */
-  .progress-wrap {
-    margin-bottom: 36px;
-    animation: fadeUp 0.5s 0.3s ease both;
-  }
-
-  .progress-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-
-  .progress-label {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-
-  .progress-count {
-    font-size: 12px;
-    color: var(--gold);
-    font-weight: 600;
-  }
-
-  .progress-track {
-    height: 4px;
-    background: var(--surface2);
-    border-radius: 100px;
-    overflow: hidden;
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--gold), var(--gold-light));
-    border-radius: 100px;
-    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    width: 0%;
-  }
-
-  /* ── Question card ── */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 36px;
-    animation: fadeUp 0.45s ease both;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    opacity: 0.6;
-  }
-
-  .question-num {
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--gold);
-    font-weight: 600;
-    margin-bottom: 12px;
-  }
-
-  .question-text {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(20px, 4vw, 26px);
-    font-weight: 700;
-    margin-bottom: 32px;
-    line-height: 1.3;
-  }
-
-  .options-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .option-btn {
-    background: var(--surface2);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 10px;
-    padding: 16px 20px;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    text-align: left;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .option-btn::after {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(135deg, var(--gold-dim), transparent);
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
-  .option-btn:hover {
-    border-color: var(--gold);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 20px rgba(201,168,76,0.1);
-  }
-
-  .option-btn:hover::after { opacity: 1; }
-
-  .option-btn.selected {
-    border-color: var(--gold);
-    background: rgba(201,168,76,0.12);
-    box-shadow: 0 0 0 1px var(--gold), 0 4px 20px rgba(201,168,76,0.15);
-  }
-
-  .option-icon {
-    width: 36px; height: 36px;
-    background: var(--surface);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-    border: 1px solid rgba(255,255,255,0.05);
-    transition: background 0.2s;
-  }
-
-  .option-btn.selected .option-icon {
-    background: var(--gold-dim);
-    border-color: var(--gold);
-  }
-
-  .option-label { flex: 1; }
-  .option-label strong { display: block; margin-bottom: 2px; }
-  .option-label span { font-size: 12px; color: var(--text-muted); }
-
-  .check {
-    width: 20px; height: 20px;
-    border: 2px solid rgba(255,255,255,0.15);
-    border-radius: 50%;
-    flex-shrink: 0;
-    margin-left: auto;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s;
-    font-size: 11px;
-  }
-
-  .option-btn.selected .check {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: #000;
-    content: '✓';
-  }
-
-  /* ── Navigation ── */
-  .nav-row {
-    display: flex;
-    gap: 12px;
-    margin-top: 28px;
-    animation: fadeUp 0.5s 0.15s ease both;
-  }
-
-  .btn {
-    flex: 1;
-    padding: 16px;
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
-    transition: all 0.2s ease;
-  }
-
-  .btn-primary {
-    background: var(--gold);
-    color: #000;
-  }
-
-  .btn-primary:hover {
-    background: var(--gold-light);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 24px rgba(201,168,76,0.35);
-  }
-
-  .btn-primary:disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-  }
-
-  .btn-ghost {
-    background: transparent;
-    color: var(--text-muted);
-    border: 1px solid rgba(255,255,255,0.08);
-    flex: 0 0 auto;
-    padding: 16px 24px;
-  }
-
-  .btn-ghost:hover {
-    color: var(--text);
-    border-color: rgba(255,255,255,0.2);
-  }
-
-  /* ── Result section ── */
-  .result-section { display: none; }
-
-  .result-header {
-    text-align: center;
-    margin-bottom: 36px;
-    animation: fadeDown 0.6s ease both;
-  }
-
-  .result-header h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(24px, 5vw, 34px);
-    font-weight: 800;
-    margin-bottom: 10px;
-  }
-
-  .result-header p { color: var(--text-muted); font-size: 15px; }
-
-  .result-cards {
-    display: grid;
-    gap: 16px;
-    margin-bottom: 32px;
-  }
-
-  .result-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 28px;
-    animation: fadeUp 0.5s ease both;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .result-card:nth-child(2) { animation-delay: 0.1s; }
-  .result-card:nth-child(3) { animation-delay: 0.2s; }
-
-  .result-card::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    opacity: 0.5;
-  }
-
-  .rc-top {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 18px;
-  }
-
-  .rc-icon {
-    width: 46px; height: 46px;
-    background: var(--gold-dim);
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
-    border: 1px solid var(--border);
-    flex-shrink: 0;
-  }
-
-  .rc-label {
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--gold);
-    font-weight: 600;
-    margin-bottom: 4px;
-  }
-
-  .rc-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    font-weight: 700;
-  }
-
-  .rc-body { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
-
-  .rc-body ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-
-  .rc-body li {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .rc-body li::before {
-    content: '→';
-    color: var(--gold);
-    font-size: 13px;
-    margin-top: 1px;
-    flex-shrink: 0;
-  }
-
-  /* ── Promo banner ── */
-  .promo {
-    background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));
-    border: 1px solid var(--gold);
-    border-radius: var(--radius);
-    padding: 22px 28px;
-    text-align: center;
-    margin-bottom: 32px;
-    animation: fadeUp 0.5s 0.3s ease both;
-  }
-
-  .promo-badge {
-    display: inline-block;
-    background: var(--gold);
-    color: #000;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 4px 12px;
-    border-radius: 100px;
-    margin-bottom: 10px;
-  }
-
-  .promo h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--gold-light);
-    margin-bottom: 4px;
-  }
-
-  .promo p {
-    font-size: 13px;
-    color: var(--text-muted);
-  }
-
-  /* ── Lead form ── */
-  .lead-form {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 36px;
-    animation: fadeUp 0.5s 0.4s ease both;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .lead-form::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  }
-
-  .lead-form h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-
-  .lead-form .form-sub {
-    font-size: 14px;
-    color: var(--text-muted);
-    margin-bottom: 28px;
-  }
-
-  .field { margin-bottom: 18px; }
-
-  .field label {
-    display: block;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 8px;
-  }
-
-  .field input {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 10px;
-    padding: 14px 18px;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .field input::placeholder { color: var(--text-muted); }
-
-  .field input:focus {
-    border-color: var(--gold);
-    box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
-  }
-
-  .btn-submit {
-    width: 100%;
-    padding: 18px;
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    border: none;
-    background: var(--gold);
-    color: #000;
-    letter-spacing: 0.03em;
-    transition: all 0.2s;
-    margin-top: 8px;
-  }
-
-  .btn-submit:hover {
-    background: var(--gold-light);
-    transform: translateY(-1px);
-    box-shadow: 0 8px 28px rgba(201,168,76,0.35);
-  }
-
-  /* ── Success state ── */
-  .success-screen {
-    display: none;
-    text-align: center;
-    padding: 60px 20px;
-    animation: fadeUp 0.5s ease both;
-  }
-
-  .success-icon {
-    width: 80px; height: 80px;
-    background: var(--gold-dim);
-    border: 2px solid var(--gold);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 36px;
-    margin: 0 auto 24px;
-  }
-
-  .success-screen h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    font-weight: 800;
-    margin-bottom: 12px;
-    color: var(--gold-light);
-  }
-
-  .success-screen p {
-    color: var(--text-muted);
-    font-size: 15px;
-    line-height: 1.7;
-  }
-
-  /* ── Animations ── */
-  @keyframes fadeDown {
-    from { opacity: 0; transform: translateY(-24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ── Responsive ── */
-  @media (min-width: 520px) {
-    .options-grid { grid-template-columns: 1fr 1fr; }
-    .options-grid.three-col { grid-template-columns: 1fr 1fr 1fr; }
-  }
-
-  @media (max-width: 480px) {
-    .card { padding: 24px 20px; }
-    .lead-form { padding: 28px 20px; }
-    .nav-row { flex-direction: column-reverse; }
-    .btn-ghost { flex: 1; }
-  }
+:root {
+  --cream:       #F5F0E8;
+  --cream-deep:  #EDE6D6;
+  --parchment:   #E2D9C8;
+  --green:       #1C3D2E;
+  --green-mid:   #2E5C44;
+  --green-light: #3D7A5A;
+  --green-pale:  rgba(28,61,46,0.07);
+  --terra:       #C05A28;
+  --terra-light: #D97040;
+  --terra-pale:  rgba(192,90,40,0.10);
+  --ink:         #1A1A18;
+  --ink-mid:     #3D3D38;
+  --ink-mute:    #7A7568;
+  --white:       #FFFFFF;
+  --shadow-sm:   0 2px 14px rgba(28,61,46,0.08);
+  --shadow-md:   0 8px 36px rgba(28,61,46,0.13);
+  --r-sm: 12px;
+  --r-md: 18px;
+  --r-lg: 24px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 90% 50% at 0% 0%,   rgba(28,61,46,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 55% at 100% 100%,rgba(192,90,40,0.05) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background-image: radial-gradient(circle, rgba(28,61,46,0.09) 1px, transparent 1px);
+  background-size: 30px 30px;
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+/* Corner ornaments */
+.corner { position: fixed; z-index: 1; opacity: 0.1; pointer-events: none; }
+.corner-tl { top: 20px; left: 20px; }
+.corner-br { bottom: 20px; right: 20px; transform: rotate(180deg); }
+
+.wrapper {
+  position: relative; z-index: 2;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 60px 24px 100px;
+}
+
+/* ── HEADER ── */
+.header {
+  text-align: center;
+  margin-bottom: 64px;
+  animation: revealDown 0.8s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--terra); margin-bottom: 22px;
+}
+.ey-line { display: block; width: 28px; height: 1px; background: var(--terra); opacity: 0.5; }
+
+h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(34px, 7vw, 56px);
+  font-weight: 600; line-height: 1.1;
+  color: var(--green); margin-bottom: 18px; letter-spacing: -0.01em;
+}
+h1 em {
+  font-style: italic; color: var(--terra);
+  position: relative; display: inline-block;
+}
+h1 em::after {
+  content: '';
+  position: absolute; left: 0; right: 0; bottom: 3px;
+  height: 2px; background: var(--terra); opacity: 0.25; border-radius: 2px;
+}
+
+.header-sub {
+  font-size: 15px; color: var(--ink-mute); line-height: 1.7;
+  max-width: 390px; margin: 0 auto; font-weight: 400;
+}
+
+/* ── PROGRESS ── */
+.prog-shell {
+  margin-bottom: 36px;
+  animation: revealUp 0.6s 0.15s cubic-bezier(0.16,1,0.3,1) both;
+}
+.prog-top {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 14px;
+}
+.prog-left { display: flex; align-items: center; gap: 12px; }
+.prog-lbl  { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute); }
+.step-dots { display: flex; gap: 6px; }
+.step-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--parchment); border: 1.5px solid var(--parchment);
+  transition: all 0.35s ease;
+}
+.step-dot.active { background: var(--green); border-color: var(--green); transform: scale(1.3); }
+.step-dot.done   { background: var(--green-light); border-color: var(--green-light); }
+.prog-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 700; color: var(--green);
+}
+.prog-track {
+  height: 5px; background: var(--parchment); border-radius: 100px; overflow: hidden;
+}
+.prog-fill {
+  height: 100%; border-radius: 100px;
+  background: linear-gradient(90deg, var(--green) 0%, var(--green-light) 70%, #6DB88A 100%);
+  width: 0%; transition: width 0.55s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+}
+.prog-fill::after {
+  content:''; position: absolute; right:0; top:0; bottom:0; width: 24px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5));
+  animation: shimmer 2s infinite;
+}
+@keyframes shimmer { 0%,100%{opacity:0} 50%{opacity:1} }
+
+/* ── QUESTION CARD ── */
+.q-card {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  padding: 48px 44px 44px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(28,61,46,0.06);
+  position: relative; overflow: hidden;
+  animation: cardIn 0.45s cubic-bezier(0.16,1,0.3,1) both;
+}
+.q-card::before {
+  content: '';
+  position: absolute; top: 0; left: 44px; right: 44px; height: 3px;
+  background: linear-gradient(90deg, var(--green), var(--green-light), var(--terra));
+  border-radius: 0 0 4px 4px;
+}
+.q-deco {
+  position: absolute; top: 20px; right: 32px;
+  font-family: 'Cormorant Garamond', serif; font-size: 110px; font-weight: 700;
+  color: var(--green); opacity: 0.04; line-height: 1; user-select: none;
+}
+.q-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--green-light); margin-bottom: 14px;
+}
+.q-badge-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--terra); }
+.q-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(22px, 4.8vw, 30px);
+  font-weight: 600; color: var(--ink); line-height: 1.25;
+  margin-bottom: 36px; max-width: 88%;
+}
+
+/* Options */
+.opts { display: grid; gap: 12px; }
+.opts.g3 { grid-template-columns: repeat(3, 1fr); }
+
+.opt {
+  border: 1.5px solid var(--cream-deep);
+  border-radius: 14px; padding: 18px 16px;
+  cursor: pointer; text-align: left;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Outfit', sans-serif;
+  transition: all 0.22s cubic-bezier(0.4,0,0.2,1);
+  display: flex; align-items: center; gap: 14px;
+  position: relative; overflow: hidden;
+}
+.opt::after {
+  content:''; position:absolute; inset:0; border-radius: inherit;
+  background: linear-gradient(135deg, var(--green-pale), transparent);
+  opacity: 0; transition: opacity 0.2s;
+}
+.opt:hover {
+  border-color: var(--green-light); background: var(--white);
+  box-shadow: var(--shadow-sm); transform: translateY(-2px);
+}
+.opt:hover::after { opacity: 1; }
+.opt.on {
+  border-color: var(--green); background: var(--white);
+  box-shadow: 0 0 0 1.5px var(--green), var(--shadow-sm);
+}
+.opt.on::after { opacity: 1; }
+
+.opt-ico {
+  width: 44px; height: 44px; border-radius: 12px;
+  background: var(--cream-deep); border: 1.5px solid var(--parchment);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0; transition: all 0.22s;
+}
+.opt.on .opt-ico { background: var(--green-pale); border-color: rgba(28,61,46,0.18); }
+
+.opt-txt { flex: 1; min-width: 0; }
+.opt-name { font-size: 14px; font-weight: 600; display: block; margin-bottom: 2px; }
+.opt-desc { font-size: 12px; color: var(--ink-mute); display: block; font-weight: 400; }
+
+.opt-chk {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid var(--parchment);
+  flex-shrink: 0; margin-left: auto;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: transparent; transition: all 0.22s;
+}
+.opt.on .opt-chk { background: var(--green); border-color: var(--green); color: white; }
+
+/* Grid-3 card style */
+.g3 .opt { flex-direction: column; text-align: center; padding: 22px 10px 18px; gap: 9px; align-items: center; }
+.g3 .opt-ico { width: 52px; height: 52px; font-size: 24px; }
+.g3 .opt-chk { display: none; }
+.g3 .opt-desc { font-size: 11px; }
+
+/* ── NAV ── */
+.nav { display: flex; gap: 12px; margin-top: 28px; animation: revealUp 0.5s 0.1s cubic-bezier(0.16,1,0.3,1) both; }
+
+.btn-back {
+  flex: 0 0 auto; height: 54px; padding: 0 26px;
+  border-radius: var(--r-md); background: transparent;
+  color: var(--ink-mute); font-family: 'Outfit', sans-serif;
+  font-size: 14px; font-weight: 500; cursor: pointer;
+  border: 1.5px solid var(--parchment); transition: all 0.2s;
+  display: flex; align-items: center; gap: 6px;
+}
+.btn-back:hover { color: var(--ink); border-color: var(--ink-mid); background: var(--white); }
+
+.btn-next {
+  flex: 1; height: 54px; border: none; border-radius: var(--r-md);
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-mid) 100%);
+  color: white; font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 600;
+  cursor: pointer; letter-spacing: 0.01em;
+  box-shadow: 0 4px 20px rgba(28,61,46,0.28);
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  transition: all 0.25s cubic-bezier(0.4,0,0.2,1); position: relative; overflow: hidden;
+}
+.btn-next::before {
+  content:''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent);
+  opacity: 0; transition: opacity 0.2s;
+}
+.btn-next:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 34px rgba(28,61,46,0.34); }
+.btn-next:hover::before { opacity: 1; }
+.btn-next:active:not(:disabled) { transform: translateY(0); }
+.btn-next:disabled { background: var(--parchment); color: var(--ink-mute); box-shadow: none; cursor: not-allowed; }
+.btn-arrow {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center; font-size: 11px;
+  transition: transform 0.2s;
+}
+.btn-next:hover:not(:disabled) .btn-arrow { transform: translateX(3px); }
+
+/* ── RESULTS ── */
+#resultSection { display: none; }
+
+.result-hero {
+  text-align: center; margin-bottom: 44px;
+  animation: revealDown 0.7s cubic-bezier(0.16,1,0.3,1) both;
+}
+.result-hero h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(30px, 6.5vw, 48px); font-weight: 600;
+  color: var(--green); line-height: 1.15; margin-bottom: 10px;
+}
+.result-hero h2 em { font-style: italic; color: var(--terra); }
+.result-hero p { font-size: 15px; color: var(--ink-mute); }
+
+.ornament {
+  display: flex; align-items: center; gap: 12px;
+  max-width: 260px; margin: 0 auto 44px;
+  animation: revealDown 0.7s 0.1s cubic-bezier(0.16,1,0.3,1) both;
+}
+.orn-line { flex: 1; height: 1px; background: var(--parchment); }
+.orn-dot  { width: 6px; height: 6px; border-radius: 50%; background: var(--terra); }
+.orn-dot.g { background: var(--green); }
+
+/* Result cards */
+.r-grid { display: grid; gap: 18px; margin-bottom: 28px; }
+
+.r-card {
+  background: var(--white); border-radius: var(--r-lg);
+  padding: 34px 38px; border: 1px solid rgba(28,61,46,0.07);
+  box-shadow: var(--shadow-sm);
+  animation: revealUp 0.55s cubic-bezier(0.16,1,0.3,1) both;
+  position: relative; overflow: hidden;
+}
+.r-card:nth-child(2) { animation-delay: 0.1s; }
+.r-card:nth-child(3) { animation-delay: 0.2s; }
+.r-card::after {
+  content:''; position: absolute; bottom:0; left:0; right:0; height:3px;
+}
+.r-card.ct::after { background: linear-gradient(90deg, var(--green), var(--green-light)); }
+.r-card.cs::after { background: linear-gradient(90deg, var(--terra), var(--terra-light)); }
+.r-card.ch::after { background: linear-gradient(90deg, #7B5EA7, #A07CC8); }
+
+.r-head { display: flex; align-items: flex-start; gap: 18px; margin-bottom: 22px; }
+.r-ico {
+  width: 54px; height: 54px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;
+}
+.ct .r-ico { background: rgba(28,61,46,0.07); }
+.cs .r-ico { background: var(--terra-pale); }
+.ch .r-ico { background: rgba(123,94,167,0.08); }
+
+.r-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 5px; }
+.ct .r-tag { color: var(--green-light); }
+.cs .r-tag { color: var(--terra); }
+.ch .r-tag { color: #7B5EA7; }
+
+.r-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:700; color:var(--ink); line-height:1.3; }
+
+.r-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.r-list li { display: flex; align-items: flex-start; gap: 11px; font-size: 14px; color: var(--ink-mid); line-height: 1.55; }
+.r-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+}
+.ct .r-num { background: rgba(28,61,46,0.09); color: var(--green); }
+.cs .r-num { background: var(--terra-pale); color: var(--terra); }
+.ch .r-num { background: rgba(123,94,167,0.09); color: #7B5EA7; }
+
+/* ── PROMO ── */
+.promo {
+  border-radius: var(--r-lg); overflow: hidden; margin-bottom: 24px;
+  animation: revealUp 0.55s 0.28s cubic-bezier(0.16,1,0.3,1) both;
+}
+.promo-in {
+  background: linear-gradient(135deg, var(--green) 0%, #2A5140 55%, #3A6855 100%);
+  padding: 36px 40px; display: flex; align-items: center; gap: 24px;
+  position: relative; overflow: hidden;
+}
+.promo-in::before {
+  content:''; position: absolute;
+  width: 220px; height: 220px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.07); top: -70px; right: -50px;
+}
+.promo-in::after {
+  content:''; position: absolute;
+  width: 130px; height: 130px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.05); bottom: -45px; right: 40px;
+}
+.promo-ico {
+  width: 68px; height: 68px; border-radius: 20px;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.16);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px; flex-shrink: 0; position: relative; z-index: 1;
+}
+.promo-txt { position: relative; z-index: 1; }
+.promo-pill {
+  display: inline-block; background: var(--terra); color: white;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 100px; margin-bottom: 10px;
+}
+.promo-txt h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(22px, 5vw, 30px); font-weight: 700; color: white; line-height: 1.2; margin-bottom: 6px;
+}
+.promo-txt p { font-size: 13px; color: rgba(255,255,255,0.62); line-height: 1.55; }
+
+/* ── FORM ── */
+.form-card {
+  background: var(--white); border-radius: var(--r-lg);
+  padding: 48px 44px; box-shadow: var(--shadow-md);
+  border: 1px solid rgba(28,61,46,0.07);
+  animation: revealUp 0.55s 0.38s cubic-bezier(0.16,1,0.3,1) both;
+  position: relative; overflow: hidden;
+}
+.form-card::before {
+  content:''; position: absolute;
+  top: 0; left: 44px; right: 44px; height: 3px;
+  background: linear-gradient(90deg, var(--green), var(--green-light), var(--terra));
+  border-radius: 0 0 4px 4px;
+}
+.form-head { margin-bottom: 32px; }
+.form-head h3 { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:700; color:var(--ink); margin-bottom:7px; }
+.form-head p  { font-size:14px; color:var(--ink-mute); line-height:1.65; }
+
+/* Floating label */
+.fld { position: relative; margin-bottom: 20px; }
+.fld label {
+  position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
+  font-size: 14px; color: var(--ink-mute); font-weight: 400;
+  pointer-events: none; transition: all 0.2s ease;
+  padding: 0 3px;
+}
+.fld input {
+  width: 100%; background: var(--cream);
+  border: 1.5px solid var(--parchment); border-radius: 13px;
+  padding: 22px 18px 8px; color: var(--ink);
+  font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 500;
+  outline: none; height: 64px; transition: all 0.22s;
+}
+.fld input:focus, .fld input:not(:placeholder-shown) { border-color: var(--green); background: var(--white); }
+.fld input:focus { box-shadow: 0 0 0 3px rgba(28,61,46,0.08); }
+.fld input:focus + label,
+.fld input:not(:placeholder-shown) + label {
+  top: 13px; transform: none;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--green); background: var(--white);
+}
+.fld-icon { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-size: 17px; pointer-events: none; }
+
+.btn-submit {
+  width: 100%; height: 58px; border-radius: var(--r-md); border: none;
+  background: linear-gradient(135deg, var(--terra) 0%, var(--terra-light) 100%);
+  color: white; font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 700;
+  cursor: pointer; letter-spacing: 0.02em;
+  box-shadow: 0 4px 22px rgba(192,90,40,0.32); margin-top: 8px;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  transition: all 0.25s cubic-bezier(0.4,0,0.2,1); position: relative; overflow: hidden;
+}
+.btn-submit::before {
+  content:''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+  opacity: 0; transition: opacity 0.2s;
+}
+.btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 38px rgba(192,90,40,0.4); }
+.btn-submit:hover::before { opacity: 1; }
+.btn-submit:active { transform: translateY(0); }
+.sub-ico { width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 13px; }
+
+.privacy { text-align: center; margin-top: 14px; font-size: 12px; color: var(--ink-mute); display: flex; align-items: center; justify-content: center; gap: 5px; }
+
+/* ── SUCCESS ── */
+#successScreen { display: none; text-align: center; padding: 72px 20px; animation: revealUp 0.6s cubic-bezier(0.16,1,0.3,1) both; }
+.success-ring {
+  width: 88px; height: 88px; border-radius: 50%;
+  background: var(--green-pale); border: 2px solid var(--green-light);
+  display: flex; align-items: center; justify-content: center; font-size: 36px;
+  margin: 0 auto 28px;
+  box-shadow: 0 0 0 10px rgba(28,61,46,0.05), 0 0 0 20px rgba(28,61,46,0.03);
+  animation: pulse 2.5s infinite;
+}
+@keyframes pulse {
+  0%,100%{box-shadow:0 0 0 10px rgba(28,61,46,0.05),0 0 0 20px rgba(28,61,46,0.03)}
+  50%    {box-shadow:0 0 0 14px rgba(28,61,46,0.06),0 0 0 26px rgba(28,61,46,0.04)}
+}
+#successScreen h2 { font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:700; color:var(--green); margin-bottom:14px; }
+#successScreen p  { color:var(--ink-mute); font-size:15px; line-height:1.75; max-width:360px; margin:0 auto; }
+#successScreen strong { color:var(--terra); font-weight:600; }
+
+/* ── KEYFRAMES ── */
+@keyframes revealDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes revealUp   { from{opacity:0;transform:translateY(20px)}  to{opacity:1;transform:translateY(0)} }
+@keyframes cardIn { from{opacity:0;transform:translateY(14px) scale(0.99)} to{opacity:1;transform:translateY(0) scale(1)} }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 540px) {
+  .q-card, .r-card, .form-card { padding: 32px 22px 28px; }
+  .promo-in { padding: 28px 22px; flex-direction: column; text-align: center; }
+  .promo-in::before, .promo-in::after { display: none; }
+}
+@media (max-width: 400px) {
+  .g3 .opt { padding: 16px 6px 14px; }
+  .g3 .opt-ico { width: 40px; height: 40px; font-size: 18px; }
+  .nav { flex-direction: column-reverse; }
+  .btn-back { height: 48px; justify-content: center; }
+}
 </style>
 </head>
 <body>
 
+<!-- Corner decorations -->
+<svg class="corner corner-tl" width="72" height="72" viewBox="0 0 72 72">
+  <path d="M4 68 L4 4 L68 4" stroke="#1C3D2E" stroke-width="1.5" fill="none"/>
+  <path d="M11 61 L11 11 L61 11" stroke="#1C3D2E" stroke-width="0.8" fill="none"/>
+  <circle cx="4" cy="4" r="3" fill="#C05A28"/>
+</svg>
+<svg class="corner corner-br" width="72" height="72" viewBox="0 0 72 72">
+  <path d="M4 68 L4 4 L68 4" stroke="#1C3D2E" stroke-width="1.5" fill="none"/>
+  <path d="M11 61 L11 11 L61 11" stroke="#1C3D2E" stroke-width="0.8" fill="none"/>
+  <circle cx="4" cy="4" r="3" fill="#C05A28"/>
+</svg>
+
 <div class="wrapper">
 
-  <!-- Header -->
-  <div class="header">
-    <div class="badge">✦ Personalised For You</div>
-    <h1>Find Your Perfect<br><span>Hairstyle & Skincare</span><br>Routine</h1>
-    <p class="subtitle">Answer 5 quick questions and get a custom grooming plan tailored to your unique profile.</p>
-  </div>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="eyebrow">
+      <span class="ey-line"></span>Men's Grooming Advisor<span class="ey-line"></span>
+    </div>
+    <h1>Find Your Perfect<br><em>Hairstyle & Skincare</em><br>Routine</h1>
+    <p class="header-sub">Answer 5 quick questions and receive a custom grooming plan built around your unique look and lifestyle.</p>
+  </header>
 
-  <!-- QUIZ SECTION -->
+  <!-- QUIZ -->
   <div id="quizSection">
-    <!-- Progress -->
-    <div class="progress-wrap">
-      <div class="progress-header">
-        <span class="progress-label">Your Progress</span>
-        <span class="progress-count" id="progressCount">1 / 5</span>
+    <div class="prog-shell">
+      <div class="prog-top">
+        <div class="prog-left">
+          <span class="prog-lbl">Progress</span>
+          <div class="step-dots" id="stepDots"></div>
+        </div>
+        <span class="prog-num" id="progNum">1 / 5</span>
       </div>
-      <div class="progress-track">
-        <div class="progress-fill" id="progressFill"></div>
+      <div class="prog-track">
+        <div class="prog-fill" id="progFill"></div>
       </div>
     </div>
 
-    <!-- Question card -->
-    <div class="card" id="questionCard">
-      <div class="question-num" id="questionNum">Question 01</div>
-      <div class="question-text" id="questionText"></div>
-      <div class="options-grid" id="optionsGrid"></div>
+    <div class="q-card" id="qCard">
+      <div class="q-deco" id="qDeco">01</div>
+      <div class="q-badge"><span class="q-badge-dot"></span><span id="qLbl">Question 01</span></div>
+      <div class="q-text" id="qTxt"></div>
+      <div class="opts" id="optsWrap"></div>
     </div>
 
-    <!-- Navigation -->
-    <div class="nav-row">
-      <button class="btn btn-ghost" id="prevBtn" onclick="prevQuestion()" style="display:none">← Back</button>
-      <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Continue →</button>
+    <div class="nav">
+      <button class="btn-back" id="backBtn" onclick="prevQ()" style="display:none">← Back</button>
+      <button class="btn-next" id="nextBtn" onclick="nextQ()" disabled>
+        <span id="nextLbl">Continue</span>
+        <span class="btn-arrow">→</span>
+      </button>
     </div>
   </div>
 
-  <!-- RESULT SECTION -->
-  <div class="result-section" id="resultSection">
-
-    <div class="result-header">
-      <div class="badge">✦ Your Custom Plan</div>
-      <h2>Your Personalised<br>Grooming Profile</h2>
-      <p>Based on your answers, here's what we recommend.</p>
+  <!-- RESULTS -->
+  <div id="resultSection">
+    <div class="result-hero">
+      <div class="eyebrow">
+        <span class="ey-line"></span>Your Custom Profile<span class="ey-line"></span>
+      </div>
+      <h2>Your Personalised<br><em>Grooming Plan</em></h2>
+      <p>Curated from your answers — tailored exclusively for you.</p>
     </div>
 
-    <div class="result-cards">
-      <div class="result-card">
-        <div class="rc-top">
-          <div class="rc-icon">💆</div>
-          <div>
-            <div class="rc-label">Facial Treatment</div>
-            <div class="rc-title" id="treatmentTitle">—</div>
-          </div>
-        </div>
-        <div class="rc-body" id="treatmentBody"></div>
-      </div>
+    <div class="ornament">
+      <div class="orn-line"></div>
+      <div class="orn-dot"></div>
+      <div class="orn-dot g"></div>
+      <div class="orn-dot"></div>
+      <div class="orn-line"></div>
+    </div>
 
-      <div class="result-card">
-        <div class="rc-top">
-          <div class="rc-icon">🧴</div>
-          <div>
-            <div class="rc-label">Skincare Routine</div>
-            <div class="rc-title" id="routineTitle">—</div>
-          </div>
+    <div class="r-grid">
+      <div class="r-card ct">
+        <div class="r-head">
+          <div class="r-ico">💆</div>
+          <div><div class="r-tag">Facial Treatment</div><div class="r-title" id="tTitle">—</div></div>
         </div>
-        <div class="rc-body" id="routineBody"></div>
+        <ul class="r-list" id="tList"></ul>
       </div>
-
-      <div class="result-card">
-        <div class="rc-top">
-          <div class="rc-icon">✂️</div>
-          <div>
-            <div class="rc-label">Suitable Hairstyle</div>
-            <div class="rc-title" id="hairstyleTitle">—</div>
-          </div>
+      <div class="r-card cs">
+        <div class="r-head">
+          <div class="r-ico">🧴</div>
+          <div><div class="r-tag">Skincare Routine</div><div class="r-title" id="sTitle">—</div></div>
         </div>
-        <div class="rc-body" id="hairstyleBody"></div>
+        <ul class="r-list" id="sList"></ul>
+      </div>
+      <div class="r-card ch">
+        <div class="r-head">
+          <div class="r-ico">✂️</div>
+          <div><div class="r-tag">Ideal Hairstyle</div><div class="r-title" id="hTitle">—</div></div>
+        </div>
+        <ul class="r-list" id="hList"></ul>
       </div>
     </div>
 
-    <!-- Promo banner -->
+    <!-- Promo -->
     <div class="promo">
-      <div class="promo-badge">🎁 Exclusive Offer</div>
-      <h3>Get ₹300 OFF on Your First Visit</h3>
-      <p>Book now and use your personalised plan on day one. Limited slots available.</p>
+      <div class="promo-in">
+        <div class="promo-ico">🎁</div>
+        <div class="promo-txt">
+          <span class="promo-pill">Exclusive Offer</span>
+          <h3>Get ₹300 OFF on<br>Your First Visit</h3>
+          <p>Book now and arrive with your personalised plan ready.<br>Limited slots — claim yours below.</p>
+        </div>
+      </div>
     </div>
 
     <!-- Lead form -->
-    <div class="lead-form" id="leadForm">
-      <h3>Claim Your ₹300 Discount</h3>
-      <p class="form-sub">Enter your details and we'll reserve your slot with the offer applied.</p>
-
-      <div class="field">
-        <label>Your Name</label>
-        <input type="text" id="nameInput" placeholder="e.g. Arjun Sharma">
+    <div class="form-card" id="formCard">
+      <div class="form-head">
+        <h3>Claim Your ₹300 Discount</h3>
+        <p>Enter your details and we'll reserve your slot with the offer applied automatically.</p>
       </div>
-
-      <div class="field">
-        <label>Phone Number</label>
-        <input type="tel" id="phoneInput" placeholder="e.g. 98765 43210" maxlength="15">
+      <div class="fld">
+        <input type="text" id="nameIn" placeholder=" ">
+        <label for="nameIn">Your Full Name</label>
+        <span class="fld-icon">👤</span>
       </div>
-
-      <button class="btn-submit" onclick="submitLead()">Book My Appointment →</button>
+      <div class="fld">
+        <input type="tel" id="phoneIn" placeholder=" " maxlength="15">
+        <label for="phoneIn">Phone Number</label>
+        <span class="fld-icon">📱</span>
+      </div>
+      <button class="btn-submit" onclick="submitForm()">
+        Book My Appointment
+        <span class="sub-ico">→</span>
+      </button>
+      <p class="privacy">🔒 Your details are private and never shared.</p>
     </div>
 
     <!-- Success -->
-    <div class="success-screen" id="successScreen">
-      <div class="success-icon">✓</div>
+    <div id="successScreen">
+      <div class="success-ring">✓</div>
       <h2>You're All Set!</h2>
-      <p>We've received your details and will contact you shortly to confirm your appointment.<br><br>
-      Your <strong style="color:var(--gold)">₹300 discount</strong> has been applied automatically. See you soon! 🎉</p>
+      <p>We've received your details and will be in touch shortly to confirm your appointment.<br><br>
+      Your <strong>₹300 discount</strong> is confirmed and locked in. See you at the chair! ✂️</p>
     </div>
-
-  </div><!-- /resultSection -->
-
-</div><!-- /wrapper -->
+  </div>
+</div>
 
 <script>
-  const questions = [
-    {
-      num: "Question 01",
-      text: "What is your skin type?",
-      cols: 3,
-      options: [
-        { icon: "💧", label: "Oily", desc: "Shiny, prone to breakouts", value: "oily" },
-        { icon: "🏜️", label: "Dry",  desc: "Tight, flaky patches",      value: "dry"  },
-        { icon: "⚖️", label: "Combination", desc: "Oily T-zone, dry cheeks", value: "combination" }
-      ]
-    },
-    {
-      num: "Question 02",
-      text: "What's your natural hair type?",
-      cols: 3,
-      options: [
-        { icon: "➖", label: "Straight", desc: "Smooth, lies flat",       value: "straight" },
-        { icon: "〰️", label: "Wavy",    desc: "Light waves, some volume", value: "wavy"     },
-        { icon: "🌀", label: "Curly",   desc: "Tight curls, lots of body", value: "curly"   }
-      ]
-    },
-    {
-      num: "Question 03",
-      text: "What is your face shape?",
-      cols: 3,
-      options: [
-        { icon: "⭕", label: "Round",  desc: "Full cheeks, soft jaw",  value: "round"  },
-        { icon: "🥚", label: "Oval",   desc: "Balanced proportions",  value: "oval"   },
-        { icon: "◻️", label: "Square", desc: "Strong jaw, wide forehead", value: "square" }
-      ]
-    },
-    {
-      num: "Question 04",
-      text: "What's your main grooming concern?",
-      cols: 1,
-      options: [
-        { icon: "🔴", label: "Acne & Breakouts",  desc: "Pimples, blackheads, blemishes", value: "acne"     },
-        { icon: "😐", label: "Dull Skin",         desc: "Lack of glow, uneven tone",      value: "dull"     },
-        { icon: "🌿", label: "Hair Fall",          desc: "Thinning, excessive shedding",   value: "hairfall" }
-      ]
-    },
-    {
-      num: "Question 05",
-      text: "How would you describe your lifestyle?",
-      cols: 1,
-      options: [
-        { icon: "🏋️", label: "Active",   desc: "Gym, sports, outdoors daily",    value: "active"  },
-        { icon: "💼", label: "Busy",     desc: "Long hours, on-the-go always",   value: "busy"    },
-        { icon: "☕", label: "Relaxed",  desc: "Steady pace, time for self-care", value: "relaxed" }
-      ]
-    }
-  ];
+const Qs = [
+  { num:"01", lbl:"Question 01", txt:"What is your skin type?", layout:"g3",
+    opts:[{e:"💧",n:"Oily",d:"Shiny, prone to breakouts",v:"oily"},{e:"🏜️",n:"Dry",d:"Tight, flaky patches",v:"dry"},{e:"⚖️",n:"Combination",d:"Oily T-zone, dry cheeks",v:"combo"}]},
+  { num:"02", lbl:"Question 02", txt:"What is your natural hair type?", layout:"g3",
+    opts:[{e:"➖",n:"Straight",d:"Smooth & flat",v:"straight"},{e:"〰️",n:"Wavy",d:"Light waves, some body",v:"wavy"},{e:"🌀",n:"Curly",d:"Tight curls, lots of body",v:"curly"}]},
+  { num:"03", lbl:"Question 03", txt:"What is your face shape?", layout:"g3",
+    opts:[{e:"⭕",n:"Round",d:"Full cheeks, soft jaw",v:"round"},{e:"🥚",n:"Oval",d:"Balanced proportions",v:"oval"},{e:"◻️",n:"Square",d:"Strong jaw, wide forehead",v:"square"}]},
+  { num:"04", lbl:"Question 04", txt:"What is your main grooming concern?", layout:"",
+    opts:[{e:"🔴",n:"Acne & Breakouts",d:"Pimples, blackheads and blemishes",v:"acne"},{e:"😐",n:"Dull Skin",d:"Lack of glow and uneven skin tone",v:"dull"},{e:"🌿",n:"Hair Fall",d:"Thinning hair or excessive shedding",v:"hairfall"}]},
+  { num:"05", lbl:"Question 05", txt:"How would you describe your lifestyle?", layout:"",
+    opts:[{e:"🏋️",n:"Active",d:"Gym, sports and outdoors daily",v:"active"},{e:"💼",n:"Busy",d:"Long hours and always on the go",v:"busy"},{e:"☕",n:"Relaxed",d:"Steady pace with time for self-care",v:"relaxed"}]}
+];
 
-  let current = 0;
-  const answers = {};
+const treatments = {
+  acne:     {t:"Deep Cleanse & Anti-Acne Facial",  s:["Salicylic acid steam cleanse to unclog pores","Clay mask to absorb excess oil and surface bacteria","Targeted spot treatment for active breakouts","Non-comedogenic SPF 30 moisturiser to finish"]},
+  dull:     {t:"Brightening & Glow Therapy",        s:["Vitamin C serum for an instant radiance boost","Gentle exfoliation to remove dull, dead skin cells","Hydrating hyaluronic acid sheet mask","Niacinamide serum to even out skin tone over time"]},
+  hairfall: {t:"Scalp Revitalising Treatment",      s:["Deep oil massage to stimulate scalp blood flow","Protein-repair hair mask to strengthen each strand","Caffeine scalp serum to reduce shedding","Gentle sulfate-free cleanse and conditioner"]}
+};
 
-  function renderQuestion() {
-    const q = questions[current];
-    document.getElementById('questionNum').textContent = q.num;
-    document.getElementById('questionText').textContent = q.text;
+const routines = {
+  oily:  {t:"Oil-Control Daily Routine", s:["AM: Foaming wash → Niacinamide toner → Oil-free moisturiser → SPF 30","PM: Double cleanse → Retinol serum → Lightweight gel moisturiser","Weekly: Clay mask to deeply control excess sebum"]},
+  dry:   {t:"Deep Hydration Routine",    s:["AM: Cream cleanser → Hyaluronic acid → Rich moisturiser → SPF 50","PM: Gentle micellar cleanse → Peptide serum → Overnight repair cream","Weekly: Hydrating sheet mask and relaxing facial massage"]},
+  combo: {t:"Balanced Dual-Zone Routine",s:["AM: Gentle gel cleanser → Balancing toner → Lightweight SPF moisturiser","PM: Foam cleanser → Niacinamide on T-zone → Cream on dry areas","Weekly: Enzyme exfoliant for a smooth, even complexion"]}
+};
 
-    const grid = document.getElementById('optionsGrid');
-    grid.innerHTML = '';
-    grid.className = 'options-grid' + (q.cols === 3 ? ' three-col' : '');
+const hairstyles = {
+  round_straight:{t:"Side-Swept Undercut",         s:["Short sides with swept length on top adds height","Creates angles that visually balance round features","Use medium-hold pomade for clean, defined hold"]},
+  round_wavy:    {t:"Textured Quiff",               s:["Vertical height from the quiff elongates the face","Natural wave texture adds effortless, casual volume","Light sea-salt spray for laid-back definition"]},
+  round_curly:   {t:"High-Top Fade",                s:["Curls on top create upward volume that balances roundness","Tight fade on sides keeps everything sharp and clean","Define curls daily with a quality curl cream"]},
+  oval_straight: {t:"Classic Slick Back or Crop",   s:["Oval face suits almost every cut — you have great options","Polished slick back works perfectly for formal occasions","Textured French crop for low-maintenance daily wear"]},
+  oval_wavy:     {t:"Curtain Bangs / Natural Flow",  s:["Side or middle part with relaxed curtain fringe","Let waves flow naturally for a laid-back, cool look","Light styling cream to define without weighing down"]},
+  oval_curly:    {t:"Defined Curls with Taper",      s:["Embrace your natural texture — it suits you beautifully","Low taper fade keeps the sides clean and modern","Curl-defining cream for consistent, all-day shape"]},
+  square_straight:{t:"Textured Fringe / Soft Crop", s:["Soft fringe forward softens a strong, angular jaw","Avoid tight buzz cuts — keep texture and length on top","Matt clay for a relaxed, editorial everyday finish"]},
+  square_wavy:   {t:"Casual Pompadour",              s:["Volume on top with wavy texture balances the jaw beautifully","Medium-hold clay for a structured, all-day shape","Blow-dry upward and back for maximum natural lift"]},
+  square_curly:  {t:"Curly Mid Fade",                s:["Natural curls on top with a clean mid fade look great","Complements angular features without overpowering them","Avoid over-styling — let the curls breathe and bounce"]}
+};
 
-    q.options.forEach(opt => {
-      const btn = document.createElement('button');
-      btn.className = 'option-btn' + (answers[current] === opt.value ? ' selected' : '');
-      btn.innerHTML = `
-        <div class="option-icon">${opt.icon}</div>
-        <div class="option-label">
-          <strong>${opt.label}</strong>
-          <span>${opt.desc}</span>
-        </div>
-        <div class="check">${answers[current] === opt.value ? '✓' : ''}</div>
-      `;
-      btn.onclick = () => selectOption(opt.value);
-      grid.appendChild(btn);
-    });
+let cur = 0;
+const ans = {};
 
-    // Progress
-    const pct = ((current) / questions.length) * 100;
-    document.getElementById('progressFill').style.width = pct + '%';
-    document.getElementById('progressCount').textContent = (current + 1) + ' / ' + questions.length;
+function buildDots() {
+  const w = document.getElementById('stepDots');
+  w.innerHTML = '';
+  Qs.forEach((_,i) => {
+    const d = document.createElement('span');
+    d.className = 'step-dot' + (i < cur ? ' done' : i === cur ? ' active' : '');
+    w.appendChild(d);
+  });
+}
 
-    // Buttons
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    prevBtn.style.display = current > 0 ? 'block' : 'none';
-    nextBtn.disabled = !answers[current];
-    nextBtn.textContent = current === questions.length - 1 ? 'See My Results ✦' : 'Continue →';
+function render() {
+  const q = Qs[cur];
+  document.getElementById('qDeco').textContent = q.num;
+  document.getElementById('qLbl').textContent  = q.lbl;
+  document.getElementById('qTxt').textContent  = q.txt;
 
-    // Animate card
-    const card = document.getElementById('questionCard');
-    card.style.animation = 'none';
-    void card.offsetWidth;
-    card.style.animation = 'fadeUp 0.4s ease both';
-  }
+  const w = document.getElementById('optsWrap');
+  w.innerHTML = '';
+  w.className = 'opts' + (q.layout ? ' ' + q.layout : '');
 
-  function selectOption(value) {
-    answers[current] = value;
-    renderQuestion();
-  }
+  q.opts.forEach(o => {
+    const b = document.createElement('button');
+    b.className = 'opt' + (ans[cur] === o.v ? ' on' : '');
+    b.innerHTML = `
+      <div class="opt-ico">${o.e}</div>
+      <div class="opt-txt">
+        <span class="opt-name">${o.n}</span>
+        <span class="opt-desc">${o.d}</span>
+      </div>
+      <div class="opt-chk">${ans[cur] === o.v ? '✓' : ''}</div>
+    `;
+    b.onclick = () => { ans[cur] = o.v; render(); };
+    w.appendChild(b);
+  });
 
-  function nextQuestion() {
-    if (!answers[current]) return;
-    if (current < questions.length - 1) {
-      current++;
-      renderQuestion();
-    } else {
-      showResults();
-    }
-  }
+  document.getElementById('progFill').style.width = (cur / Qs.length * 100) + '%';
+  document.getElementById('progNum').textContent = (cur + 1) + ' / ' + Qs.length;
+  buildDots();
 
-  function prevQuestion() {
-    if (current > 0) { current--; renderQuestion(); }
-  }
+  document.getElementById('backBtn').style.display = cur > 0 ? 'flex' : 'none';
+  const nb = document.getElementById('nextBtn');
+  nb.disabled = !ans[cur];
+  document.getElementById('nextLbl').textContent = cur === Qs.length - 1 ? 'See My Results' : 'Continue';
 
-  // ── Result logic ──
-  function showResults() {
-    document.getElementById('progressFill').style.width = '100%';
-    document.getElementById('progressCount').textContent = '5 / 5';
+  const card = document.getElementById('qCard');
+  card.style.animation = 'none'; void card.offsetWidth;
+  card.style.animation = 'cardIn 0.45s cubic-bezier(0.16,1,0.3,1) both';
+}
 
-    const skin     = answers[0]; // oily | dry | combination
-    const hair     = answers[1]; // straight | wavy | curly
-    const face     = answers[2]; // round | oval | square
-    const concern  = answers[3]; // acne | dull | hairfall
-    const life     = answers[4]; // active | busy | relaxed
+function nextQ() {
+  if (!ans[cur]) return;
+  if (cur < Qs.length - 1) { cur++; render(); }
+  else showResults();
+}
 
-    // Facial Treatment
-    const treatments = {
-      acne:     { title: "Deep Cleanse & Anti-Acne Facial", body: ["Salicylic acid steam cleanse to unclog pores", "Clay mask to absorb excess oil & bacteria", "Spot treatment for active breakouts", "Non-comedogenic SPF 30 to finish"] },
-      dull:     { title: "Brightening & Glow Therapy",      body: ["Vitamin C serum application for radiance", "Mild exfoliation to remove dead skin cells", "Hydrating hyaluronic acid mask", "Lightweight moisturiser with niacinamide"] },
-      hairfall: { title: "Scalp Revitalising Treatment",    body: ["Scalp detox oil massage to boost circulation", "Protein-repair hair mask for strength", "Anti-hairfall caffeine serum application", "Gentle sulfate-free cleanse & condition"] }
-    };
+function prevQ() { if (cur > 0) { cur--; render(); } }
 
-    // Skincare Routine
-    const routines = {
-      oily:        { title: "Oil-Control AM/PM Routine",   steps: ["AM: Foaming face wash → Niacinamide toner → Oil-free moisturiser → SPF 30", "PM: Double cleanse → Retinol serum → Light gel moisturiser", "Weekly: Clay mask to control excess sebum"] },
-      dry:         { title: "Hydration-First Routine",     steps: ["AM: Cream cleanser → Hyaluronic acid serum → Rich moisturiser → SPF 50", "PM: Gentle micellar cleanse → Peptide serum → Overnight cream", "Weekly: Hydrating sheet mask + facial massage"] },
-      combination: { title: "Balanced Dual-Zone Routine",  steps: ["AM: Gentle gel cleanser → Balancing toner → Lightweight SPF moisturiser", "PM: Foam cleanser → Niacinamide for T-zone → Cream for dry areas", "Weekly: Enzyme exfoliant on entire face"] }
-    };
+function li(items, cls) {
+  return items.map((s,i) => `<li><span class="r-num">${i+1}</span><span>${s}</span></li>`).join('');
+}
 
-    // Hairstyle
-    const hairstyles = {
-      round_straight:   { title: "Side-Swept Undercut",         desc: "Adds height and angles to soften round features. Short sides with length on top swept to one side." },
-      round_wavy:       { title: "Textured Quiff",              desc: "Adds vertical height which elongates your face. Natural waves give effortless volume with minimal product." },
-      round_curly:      { title: "High-Top Fade",               desc: "Curls on top create upward volume that balances round faces beautifully. Tight fade on sides keeps it sharp." },
-      oval_straight:    { title: "Classic Slick Back or Crop",  desc: "Your oval face suits almost any cut. Try a polished slick back for formal looks or a textured French crop daily." },
-      oval_wavy:        { title: "Natural Flow / Curtains",      desc: "Let your waves do the work. A middle or side part with curtain bangs gives a relaxed, effortlessly cool look." },
-      oval_curly:       { title: "Defined Curls with Taper",    desc: "Embrace your texture with a curly top and low taper fade. Use curl-defining cream to keep shape." },
-      square_straight:  { title: "Textured Fringe / Soft Crop", desc: "A soft fringe forward softens your strong jaw. Avoid buzz cuts — keep some texture on top." },
-      square_wavy:      { title: "Casual Pompadour",            desc: "Volume on top with wavy texture balances a square jaw. Use a medium-hold clay for all-day hold." },
-      square_curly:     { title: "Curly Mid Fade",              desc: "Natural curls on top with a mid fade complement the angular jaw without overpowering it." }
-    };
+function showResults() {
+  document.getElementById('progFill').style.width = '100%';
+  buildDots();
 
-    const t = treatments[concern];
-    const r = routines[skin];
-    const h = hairstyles[`${face}_${hair}`] || hairstyles[`oval_${hair}`];
+  const tr = treatments[ans[3]];
+  const ro = routines[ans[0]];
+  const hs = hairstyles[`${ans[2]}_${ans[1]}`] || hairstyles[`oval_${ans[1]}`];
 
-    document.getElementById('treatmentTitle').textContent = t.title;
-    document.getElementById('treatmentBody').innerHTML = '<ul>' + t.body.map(s => `<li>${s}</li>`).join('') + '</ul>';
+  document.getElementById('tTitle').textContent = tr.t;
+  document.getElementById('tList').innerHTML = li(tr.s, 'ct');
+  document.getElementById('sTitle').textContent = ro.t;
+  document.getElementById('sList').innerHTML = li(ro.s, 'cs');
+  document.getElementById('hTitle').textContent = hs.t;
+  document.getElementById('hList').innerHTML = li(hs.s, 'ch');
 
-    document.getElementById('routineTitle').textContent = r.title;
-    document.getElementById('routineBody').innerHTML = '<ul>' + r.steps.map(s => `<li>${s}</li>`).join('') + '</ul>';
+  document.getElementById('quizSection').style.display = 'none';
+  const rs = document.getElementById('resultSection');
+  rs.style.display = 'block';
+  rs.style.animation = 'none'; void rs.offsetWidth;
+  rs.style.animation = 'revealUp 0.5s cubic-bezier(0.16,1,0.3,1) both';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-    document.getElementById('hairstyleTitle').textContent = h.title;
-    document.getElementById('hairstyleBody').innerHTML = h.desc;
+function submitForm() {
+  const name  = document.getElementById('nameIn').value.trim();
+  const phone = document.getElementById('phoneIn').value.trim();
+  if (!name)  { wiggle('nameIn');  return; }
+  if (!phone || phone.replace(/\D/g,'').length < 10) { wiggle('phoneIn'); return; }
+  document.getElementById('formCard').style.display = 'none';
+  document.getElementById('successScreen').style.display = 'block';
+  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+}
 
-    // Transition
-    document.getElementById('quizSection').style.display = 'none';
-    const rs = document.getElementById('resultSection');
-    rs.style.display = 'block';
-    rs.style.animation = 'none';
-    void rs.offsetWidth;
-    rs.style.animation = 'fadeUp 0.5s ease both';
-  }
+function wiggle(id) {
+  const el = document.getElementById(id);
+  el.style.borderColor = '#D94040'; el.style.boxShadow = '0 0 0 3px rgba(217,64,64,0.12)';
+  el.animate([
+    {transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},
+    {transform:'translateX(-4px)'},{transform:'translateX(4px)'},{transform:'translateX(0)'}
+  ],{duration:360,easing:'ease'});
+  setTimeout(()=>{ el.style.borderColor=''; el.style.boxShadow=''; }, 1400);
+}
 
-  function submitLead() {
-    const name  = document.getElementById('nameInput').value.trim();
-    const phone = document.getElementById('phoneInput').value.trim();
-
-    if (!name) { document.getElementById('nameInput').focus(); shake(document.getElementById('nameInput')); return; }
-    if (!phone || phone.replace(/\D/g, '').length < 10) { document.getElementById('phoneInput').focus(); shake(document.getElementById('phoneInput')); return; }
-
-    document.getElementById('leadForm').style.display = 'none';
-    document.getElementById('successScreen').style.display = 'block';
-  }
-
-  function shake(el) {
-    el.style.animation = 'none';
-    void el.offsetWidth;
-    el.style.borderColor = '#e05a5a';
-    el.style.boxShadow = '0 0 0 3px rgba(224,90,90,0.15)';
-    setTimeout(() => {
-      el.style.borderColor = '';
-      el.style.boxShadow = '';
-    }, 1200);
-  }
-
-  // Init
-  renderQuestion();
+render();
 </script>
 </body>
 </html>
