@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find Your Perfect Hairstyle & Skincare Routine</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --surface2: #1e1e1e;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-dim: rgba(201,168,76,0.15);
+    --text: #f0ece4;
+    --text-muted: #8a8074;
+    --border: rgba(201,168,76,0.2);
+    --radius: 14px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Background texture ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(201,168,76,0.08) 0%, transparent 65%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0;
+  }
+
+  .wrapper {
+    position: relative; z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    margin-bottom: 52px;
+    animation: fadeDown 0.7s ease both;
+  }
+
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 18px;
+    margin-bottom: 22px;
+    background: var(--gold-dim);
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 6vw, 42px);
+    font-weight: 900;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  h1 span { color: var(--gold); }
+
+  .subtitle {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  /* ── Progress bar ── */
+  .progress-wrap {
+    margin-bottom: 36px;
+    animation: fadeUp 0.5s 0.3s ease both;
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .progress-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .progress-count {
+    font-size: 12px;
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  .progress-track {
+    height: 4px;
+    background: var(--surface2);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    border-radius: 100px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+  }
+
+  /* ── Question card ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px;
+    animation: fadeUp 0.45s ease both;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.6;
+  }
+
+  .question-num {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .question-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 4vw, 26px);
+    font-weight: 700;
+    margin-bottom: 32px;
+    line-height: 1.3;
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 16px 20px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .option-btn::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--gold-dim), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .option-btn:hover {
+    border-color: var(--gold);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(201,168,76,0.1);
+  }
+
+  .option-btn:hover::after { opacity: 1; }
+
+  .option-btn.selected {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.12);
+    box-shadow: 0 0 0 1px var(--gold), 0 4px 20px rgba(201,168,76,0.15);
+  }
+
+  .option-icon {
+    width: 36px; height: 36px;
+    background: var(--surface);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: background 0.2s;
+  }
+
+  .option-btn.selected .option-icon {
+    background: var(--gold-dim);
+    border-color: var(--gold);
+  }
+
+  .option-label { flex: 1; }
+  .option-label strong { display: block; margin-bottom: 2px; }
+  .option-label span { font-size: 12px; color: var(--text-muted); }
+
+  .check {
+    width: 20px; height: 20px;
+    border: 2px solid rgba(255,255,255,0.15);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-left: auto;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    font-size: 11px;
+  }
+
+  .option-btn.selected .check {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #000;
+    content: '✓';
+  }
+
+  /* ── Navigation ── */
+  .nav-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+    animation: fadeUp 0.5s 0.15s ease both;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 16px;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: #000;
+  }
+
+  .btn-primary:hover {
+    background: var(--gold-light);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px rgba(201,168,76,0.35);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid rgba(255,255,255,0.08);
+    flex: 0 0 auto;
+    padding: 16px 24px;
+  }
+
+  .btn-ghost:hover {
+    color: var(--text);
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  /* ── Result section ── */
+  .result-section { display: none; }
+
+  .result-header {
+    text-align: center;
+    margin-bottom: 36px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .result-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 5vw, 34px);
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
+
+  .result-header p { color: var(--text-muted); font-size: 15px; }
+
+  .result-cards {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    animation: fadeUp 0.5s ease both;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .result-card:nth-child(2) { animation-delay: 0.1s; }
+  .result-card:nth-child(3) { animation-delay: 0.2s; }
+
+  .result-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.5;
+  }
+
+  .rc-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .rc-icon {
+    width: 46px; height: 46px;
+    background: var(--gold-dim);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .rc-label {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .rc-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .rc-body { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+
+  .rc-body ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+  .rc-body li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .rc-body li::before {
+    content: '→';
+    color: var(--gold);
+    font-size: 13px;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+
+  /* ── Promo banner ── */
+  .promo {
+    background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));
+    border: 1px solid var(--gold);
+    border-radius: var(--radius);
+    padding: 22px 28px;
+    text-align: center;
+    margin-bottom: 32px;
+    animation: fadeUp 0.5s 0.3s ease both;
+  }
+
+  .promo-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: #000;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-bottom: 10px;
+  }
+
+  .promo h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--gold-light);
+    margin-bottom: 4px;
+  }
+
+  .promo p {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* ── Lead form ── */
+  .lead-form {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px;
+    animation: fadeUp 0.5s 0.4s ease both;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .lead-form::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .lead-form h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .lead-form .form-sub {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+  }
+
+  .field { margin-bottom: 18px; }
+
+  .field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .field input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 14px 18px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .field input::placeholder { color: var(--text-muted); }
+
+  .field input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+  }
+
+  .btn-submit {
+    width: 100%;
+    padding: 18px;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    background: var(--gold);
+    color: #000;
+    letter-spacing: 0.03em;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+
+  .btn-submit:hover {
+    background: var(--gold-light);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 28px rgba(201,168,76,0.35);
+  }
+
+  /* ── Success state ── */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 60px 20px;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .success-icon {
+    width: 80px; height: 80px;
+    background: var(--gold-dim);
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    margin: 0 auto 24px;
+  }
+
+  .success-screen h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: var(--gold-light);
+  }
+
+  .success-screen p {
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Responsive ── */
+  @media (min-width: 520px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+    .options-grid.three-col { grid-template-columns: 1fr 1fr 1fr; }
+  }
+
+  @media (max-width: 480px) {
+    .card { padding: 24px 20px; }
+    .lead-form { padding: 28px 20px; }
+    .nav-row { flex-direction: column-reverse; }
+    .btn-ghost { flex: 1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="badge">✦ Personalised For You</div>
+    <h1>Find Your Perfect<br><span>Hairstyle & Skincare</span><br>Routine</h1>
+    <p class="subtitle">Answer 5 quick questions and get a custom grooming plan tailored to your unique profile.</p>
+  </div>
+
+  <!-- QUIZ SECTION -->
+  <div id="quizSection">
+    <!-- Progress -->
+    <div class="progress-wrap">
+      <div class="progress-header">
+        <span class="progress-label">Your Progress</span>
+        <span class="progress-count" id="progressCount">1 / 5</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <!-- Question card -->
+    <div class="card" id="questionCard">
+      <div class="question-num" id="questionNum">Question 01</div>
+      <div class="question-text" id="questionText"></div>
+      <div class="options-grid" id="optionsGrid"></div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-row">
+      <button class="btn btn-ghost" id="prevBtn" onclick="prevQuestion()" style="display:none">← Back</button>
+      <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Continue →</button>
+    </div>
+  </div>
+
+  <!-- RESULT SECTION -->
+  <div class="result-section" id="resultSection">
+
+    <div class="result-header">
+      <div class="badge">✦ Your Custom Plan</div>
+      <h2>Your Personalised<br>Grooming Profile</h2>
+      <p>Based on your answers, here's what we recommend.</p>
+    </div>
+
+    <div class="result-cards">
+      <div class="result-card">
+        <div class="rc-top">
+          <div class="rc-icon">💆</div>
+          <div>
+            <div class="rc-label">Facial Treatment</div>
+            <div class="rc-title" id="treatmentTitle">—</div>
+          </div>
+        </div>
+        <div class="rc-body" id="treatmentBody"></div>
+      </div>
+
+      <div class="result-card">
+        <div class="rc-top">
+          <div class="rc-icon">🧴</div>
+          <div>
+            <div class="rc-label">Skincare Routine</div>
+            <div class="rc-title" id="routineTitle">—</div>
+          </div>
+        </div>
+        <div class="rc-body" id="routineBody"></div>
+      </div>
+
+      <div class="result-card">
+        <div class="rc-top">
+          <div class="rc-icon">✂️</div>
+          <div>
+            <div class="rc-label">Suitable Hairstyle</div>
+            <div class="rc-title" id="hairstyleTitle">—</div>
+          </div>
+        </div>
+        <div class="rc-body" id="hairstyleBody"></div>
+      </div>
+    </div>
+
+    <!-- Promo banner -->
+    <div class="promo">
+      <div class="promo-badge">🎁 Exclusive Offer</div>
+      <h3>Get ₹300 OFF on Your First Visit</h3>
+      <p>Book now and use your personalised plan on day one. Limited slots available.</p>
+    </div>
+
+    <!-- Lead form -->
+    <div class="lead-form" id="leadForm">
+      <h3>Claim Your ₹300 Discount</h3>
+      <p class="form-sub">Enter your details and we'll reserve your slot with the offer applied.</p>
+
+      <div class="field">
+        <label>Your Name</label>
+        <input type="text" id="nameInput" placeholder="e.g. Arjun Sharma">
+      </div>
+
+      <div class="field">
+        <label>Phone Number</label>
+        <input type="tel" id="phoneInput" placeholder="e.g. 98765 43210" maxlength="15">
+      </div>
+
+      <button class="btn-submit" onclick="submitLead()">Book My Appointment →</button>
+    </div>
+
+    <!-- Success -->
+    <div class="success-screen" id="successScreen">
+      <div class="success-icon">✓</div>
+      <h2>You're All Set!</h2>
+      <p>We've received your details and will contact you shortly to confirm your appointment.<br><br>
+      Your <strong style="color:var(--gold)">₹300 discount</strong> has been applied automatically. See you soon! 🎉</p>
+    </div>
+
+  </div><!-- /resultSection -->
+
+</div><!-- /wrapper -->
+
+<script>
+  const questions = [
+    {
+      num: "Question 01",
+      text: "What is your skin type?",
+      cols: 3,
+      options: [
+        { icon: "💧", label: "Oily", desc: "Shiny, prone to breakouts", value: "oily" },
+        { icon: "🏜️", label: "Dry",  desc: "Tight, flaky patches",      value: "dry"  },
+        { icon: "⚖️", label: "Combination", desc: "Oily T-zone, dry cheeks", value: "combination" }
+      ]
+    },
+    {
+      num: "Question 02",
+      text: "What's your natural hair type?",
+      cols: 3,
+      options: [
+        { icon: "➖", label: "Straight", desc: "Smooth, lies flat",       value: "straight" },
+        { icon: "〰️", label: "Wavy",    desc: "Light waves, some volume", value: "wavy"     },
+        { icon: "🌀", label: "Curly",   desc: "Tight curls, lots of body", value: "curly"   }
+      ]
+    },
+    {
+      num: "Question 03",
+      text: "What is your face shape?",
+      cols: 3,
+      options: [
+        { icon: "⭕", label: "Round",  desc: "Full cheeks, soft jaw",  value: "round"  },
+        { icon: "🥚", label: "Oval",   desc: "Balanced proportions",  value: "oval"   },
+        { icon: "◻️", label: "Square", desc: "Strong jaw, wide forehead", value: "square" }
+      ]
+    },
+    {
+      num: "Question 04",
+      text: "What's your main grooming concern?",
+      cols: 1,
+      options: [
+        { icon: "🔴", label: "Acne & Breakouts",  desc: "Pimples, blackheads, blemishes", value: "acne"     },
+        { icon: "😐", label: "Dull Skin",         desc: "Lack of glow, uneven tone",      value: "dull"     },
+        { icon: "🌿", label: "Hair Fall",          desc: "Thinning, excessive shedding",   value: "hairfall" }
+      ]
+    },
+    {
+      num: "Question 05",
+      text: "How would you describe your lifestyle?",
+      cols: 1,
+      options: [
+        { icon: "🏋️", label: "Active",   desc: "Gym, sports, outdoors daily",    value: "active"  },
+        { icon: "💼", label: "Busy",     desc: "Long hours, on-the-go always",   value: "busy"    },
+        { icon: "☕", label: "Relaxed",  desc: "Steady pace, time for self-care", value: "relaxed" }
+      ]
+    }
+  ];
+
+  let current = 0;
+  const answers = {};
+
+  function renderQuestion() {
+    const q = questions[current];
+    document.getElementById('questionNum').textContent = q.num;
+    document.getElementById('questionText').textContent = q.text;
+
+    const grid = document.getElementById('optionsGrid');
+    grid.innerHTML = '';
+    grid.className = 'options-grid' + (q.cols === 3 ? ' three-col' : '');
+
+    q.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn' + (answers[current] === opt.value ? ' selected' : '');
+      btn.innerHTML = `
+        <div class="option-icon">${opt.icon}</div>
+        <div class="option-label">
+          <strong>${opt.label}</strong>
+          <span>${opt.desc}</span>
+        </div>
+        <div class="check">${answers[current] === opt.value ? '✓' : ''}</div>
+      `;
+      btn.onclick = () => selectOption(opt.value);
+      grid.appendChild(btn);
+    });
+
+    // Progress
+    const pct = ((current) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressCount').textContent = (current + 1) + ' / ' + questions.length;
+
+    // Buttons
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    prevBtn.style.display = current > 0 ? 'block' : 'none';
+    nextBtn.disabled = !answers[current];
+    nextBtn.textContent = current === questions.length - 1 ? 'See My Results ✦' : 'Continue →';
+
+    // Animate card
+    const card = document.getElementById('questionCard');
+    card.style.animation = 'none';
+    void card.offsetWidth;
+    card.style.animation = 'fadeUp 0.4s ease both';
+  }
+
+  function selectOption(value) {
+    answers[current] = value;
+    renderQuestion();
+  }
+
+  function nextQuestion() {
+    if (!answers[current]) return;
+    if (current < questions.length - 1) {
+      current++;
+      renderQuestion();
+    } else {
+      showResults();
+    }
+  }
+
+  function prevQuestion() {
+    if (current > 0) { current--; renderQuestion(); }
+  }
+
+  // ── Result logic ──
+  function showResults() {
+    document.getElementById('progressFill').style.width = '100%';
+    document.getElementById('progressCount').textContent = '5 / 5';
+
+    const skin     = answers[0]; // oily | dry | combination
+    const hair     = answers[1]; // straight | wavy | curly
+    const face     = answers[2]; // round | oval | square
+    const concern  = answers[3]; // acne | dull | hairfall
+    const life     = answers[4]; // active | busy | relaxed
+
+    // Facial Treatment
+    const treatments = {
+      acne:     { title: "Deep Cleanse & Anti-Acne Facial", body: ["Salicylic acid steam cleanse to unclog pores", "Clay mask to absorb excess oil & bacteria", "Spot treatment for active breakouts", "Non-comedogenic SPF 30 to finish"] },
+      dull:     { title: "Brightening & Glow Therapy",      body: ["Vitamin C serum application for radiance", "Mild exfoliation to remove dead skin cells", "Hydrating hyaluronic acid mask", "Lightweight moisturiser with niacinamide"] },
+      hairfall: { title: "Scalp Revitalising Treatment",    body: ["Scalp detox oil massage to boost circulation", "Protein-repair hair mask for strength", "Anti-hairfall caffeine serum application", "Gentle sulfate-free cleanse & condition"] }
+    };
+
+    // Skincare Routine
+    const routines = {
+      oily:        { title: "Oil-Control AM/PM Routine",   steps: ["AM: Foaming face wash → Niacinamide toner → Oil-free moisturiser → SPF 30", "PM: Double cleanse → Retinol serum → Light gel moisturiser", "Weekly: Clay mask to control excess sebum"] },
+      dry:         { title: "Hydration-First Routine",     steps: ["AM: Cream cleanser → Hyaluronic acid serum → Rich moisturiser → SPF 50", "PM: Gentle micellar cleanse → Peptide serum → Overnight cream", "Weekly: Hydrating sheet mask + facial massage"] },
+      combination: { title: "Balanced Dual-Zone Routine",  steps: ["AM: Gentle gel cleanser → Balancing toner → Lightweight SPF moisturiser", "PM: Foam cleanser → Niacinamide for T-zone → Cream for dry areas", "Weekly: Enzyme exfoliant on entire face"] }
+    };
+
+    // Hairstyle
+    const hairstyles = {
+      round_straight:   { title: "Side-Swept Undercut",         desc: "Adds height and angles to soften round features. Short sides with length on top swept to one side." },
+      round_wavy:       { title: "Textured Quiff",              desc: "Adds vertical height which elongates your face. Natural waves give effortless volume with minimal product." },
+      round_curly:      { title: "High-Top Fade",               desc: "Curls on top create upward volume that balances round faces beautifully. Tight fade on sides keeps it sharp." },
+      oval_straight:    { title: "Classic Slick Back or Crop",  desc: "Your oval face suits almost any cut. Try a polished slick back for formal looks or a textured French crop daily." },
+      oval_wavy:        { title: "Natural Flow / Curtains",      desc: "Let your waves do the work. A middle or side part with curtain bangs gives a relaxed, effortlessly cool look." },
+      oval_curly:       { title: "Defined Curls with Taper",    desc: "Embrace your texture with a curly top and low taper fade. Use curl-defining cream to keep shape." },
+      square_straight:  { title: "Textured Fringe / Soft Crop", desc: "A soft fringe forward softens your strong jaw. Avoid buzz cuts — keep some texture on top." },
+      square_wavy:      { title: "Casual Pompadour",            desc: "Volume on top with wavy texture balances a square jaw. Use a medium-hold clay for all-day hold." },
+      square_curly:     { title: "Curly Mid Fade",              desc: "Natural curls on top with a mid fade complement the angular jaw without overpowering it." }
+    };
+
+    const t = treatments[concern];
+    const r = routines[skin];
+    const h = hairstyles[`${face}_${hair}`] || hairstyles[`oval_${hair}`];
+
+    document.getElementById('treatmentTitle').textContent = t.title;
+    document.getElementById('treatmentBody').innerHTML = '<ul>' + t.body.map(s => `<li>${s}</li>`).join('') + '</ul>';
+
+    document.getElementById('routineTitle').textContent = r.title;
+    document.getElementById('routineBody').innerHTML = '<ul>' + r.steps.map(s => `<li>${s}</li>`).join('') + '</ul>';
+
+    document.getElementById('hairstyleTitle').textContent = h.title;
+    document.getElementById('hairstyleBody').innerHTML = h.desc;
+
+    // Transition
+    document.getElementById('quizSection').style.display = 'none';
+    const rs = document.getElementById('resultSection');
+    rs.style.display = 'block';
+    rs.style.animation = 'none';
+    void rs.offsetWidth;
+    rs.style.animation = 'fadeUp 0.5s ease both';
+  }
+
+  function submitLead() {
+    const name  = document.getElementById('nameInput').value.trim();
+    const phone = document.getElementById('phoneInput').value.trim();
+
+    if (!name) { document.getElementById('nameInput').focus(); shake(document.getElementById('nameInput')); return; }
+    if (!phone || phone.replace(/\D/g, '').length < 10) { document.getElementById('phoneInput').focus(); shake(document.getElementById('phoneInput')); return; }
+
+    document.getElementById('leadForm').style.display = 'none';
+    document.getElementById('successScreen').style.display = 'block';
+  }
+
+  function shake(el) {
+    el.style.animation = 'none';
+    void el.offsetWidth;
+    el.style.borderColor = '#e05a5a';
+    el.style.boxShadow = '0 0 0 3px rgba(224,90,90,0.15)';
+    setTimeout(() => {
+      el.style.borderColor = '';
+      el.style.boxShadow = '';
+    }, 1200);
+  }
+
+  // Init
+  renderQuestion();
+</script>
+</body>
+</html>
