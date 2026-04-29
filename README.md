@@ -16,7 +16,7 @@ Users answer a few quick questions about their skin, hair, and lifestyle, and re
 - JavaScript  
 
 ## Live Demo
-(Add your Vercel link here)
+[click here](https://grooming-quiz.vercel.app/)
 
 ## Purpose
 Built as part of an assignment to design and implement a lead magnet for a salon or spa business.
